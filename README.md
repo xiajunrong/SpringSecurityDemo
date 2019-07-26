@@ -1,2 +1,2 @@
-这是一个springboot + springSecurity的小demo,启动类可以忽略，其实也不用数据库，因为我在DAO层模拟了数据，并没有用到数据库。此demo是用来提高下自己的
+这是一个springboot + springSecurity的小demo,启动类的controller内容可以忽略，因为这是之前整合mybatis，后来我基于此demo添加了spring Security，如果单纯看下springSecurity的话其实不用数据库，因为我在DAO层模拟了数据，并没有用到数据库。此demo是用来提高下自己的
 能力，如果有朋友下载了或者有问题的请见谅
