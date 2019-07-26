@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xjr.mapper.ClassVoMapper" >
+
+  <!--resultMap begin-->
+  <resultMap id="BaseResultMap" type="com.xjr.model.ClassVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="classname" property="classname" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="OTM" type="com.xjr.model.ClassVo">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="classname" property="classname" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <collection property="studentDOS" column="id" ofType="com.xjr.model.StudentDO" >
+      <id column="id" property="id" jdbcType="VARCHAR" />
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="kc" property="kc" jdbcType="VARCHAR" />
+      <result column="fs" property="fs" jdbcType="INTEGER" />
+    </collection>
+  </resultMap>
+  <resultMap id="MTM" type="com.xjr.model.ClassVo">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="classname" property="classname" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <collection property="teacherVOS"  ofType="com.xjr.model.TeacherVO">
+      <id column="tid" property="id" jdbcType="VARCHAR"/>
+      <result column="tname" property="name" jdbcType="VARCHAR"/>
+    </collection>
+    <collection property="studentDOS"   ofType="studentDo" >
+      <id column="sid" property="id" jdbcType="VARCHAR" />
+      <result column="sname" property="name" jdbcType="VARCHAR" />
+      <result column="kc" property="kc" jdbcType="VARCHAR" />
+      <result column="fs" property="fs" jdbcType="INTEGER" />
+    </collection>
+  </resultMap>
+  <!--resultMap end-->
+
+  <!--select Begin-->
+  <select id="getStudents" resultMap="OTM" parameterType="com.xjr.model.ClassVo">
+    SELECT t1.*,t2.* FROM  class   t1 left join student  t2
+    on t1.id = t2.class_id
+  </select>
+
+  <sql id="Base_Column_List" >
+    id, classname, location
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from class
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getTeachers" resultMap="MTM" parameterType="java.lang.String">
+     select c.*,s.id as sid ,s.name as sname ,s.kc,s.fs, t.id as tid ,t.name as tname from class c ,teacher t, t_class_teacher ct ,student s
+     where c.id = ct.class_id
+      and  t.id = ct.teacher_id
+      and  c.id = s.class_id
+      and  c.id = #{cid}
+  </select>
+
+  <!--select END-->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from class
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xjr.model.ClassVo" >
+    insert into class (id, classname, location
+      )
+    values (#{id,jdbcType=VARCHAR}, #{classname,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xjr.model.ClassVo" >
+    insert into class
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="classname != null" >
+        classname,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="classname != null" >
+        #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xjr.model.ClassVo" >
+    update class
+    <set >
+      <if test="classname != null" >
+        classname = #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xjr.model.ClassVo" >
+    update class
+    set classname = #{classname,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

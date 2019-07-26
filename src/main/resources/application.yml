@@ -1,14 +1,46 @@
+server:
+  port: 8080
 spring:
-  cache:
-    type: redis
-    redis:
-      cache-null-values: false
-      time-to-live: 3600000ms
-  redis:
-    host: 10.123.52.189
-    port: 6379
-    database: 5
-    password: Rd^is*8
+   thymeleaf:
+      #模板的模式，支持 HTML, XML TEXT JAVASCRIPT
+      mode: HTML5
+      #编码 可不用配置
+      encoding: UTF-8
+      #内容类别,可不用配置
+      #开发配置为false,避免修改模板还要重启服务器
+      cache: false
+      #配置模板路径，默认是templates，可以不用配置
+      prefix: classpath:/templates/
+   datasource:
+    url: jdbc:mysql://localhost:3306/test?characterEncoding=utf8&serverTimezone=UTC&useSSL=false
+    username: root
+    password: 86723521
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+    web-stat-filter:
+      enable: true
+      url-pattern: /*
+      exclusion: '*.html'
+    start-view-servlet:
+      enabled: true
+      url-pattern: /druid/*
+      reset-enable: false
+mybatis:
+    mapper-locations: classpath:mapping/*.xml
+    config-location: classpath:mybatis-config.xml
 logging:
-  level:
-    root: info
+  file: log/mylog.log
+
